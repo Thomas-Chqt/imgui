@@ -7,21 +7,31 @@
 
 cmake_minimum_required(VERSION 3.16)
 
-option(IM_BUILD_GLFW     "Build GLFW backend" OFF)
-option(IM_BUILD_METAL    "Build GLFW backend" OFF)
-option(IM_BUILD_OPENGL3  "Build GLFW backend" OFF)
+option(IM_BUILD_GLFW     "Build GLFW backend"    OFF)
+option(IM_BUILD_METAL    "Build Metal backend"   OFF)
+option(IM_BUILD_OPENGL3  "Build Opengl3 backend" OFF)
 
-option(IM_BUILD_EXAMPLES "Build examples"     OFF)
+option(IM_BUILD_EXAMPLES "Build examples" OFF)
 
 project(imgui)
-
 enable_language(CXX)
-
 if(IM_BUILD_METAL)
     enable_language(OBJCXX)
 endif()
 
-add_library(imgui ${IMGUI_LIBRARY_TYPE})
+if(NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+endif()
+
+if(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
+endif()
+
+if(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
+endif()
+
+add_library(imgui STATIC)
 
 set_target_properties(imgui PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
 
@@ -50,7 +60,6 @@ if(IM_BUILD_GLFW)
     "backends/imgui_impl_glfw.h"
     "backends/imgui_impl_glfw.cpp"
     )
-    set(BACKEND_CONTAIN_GLFW ON)
 endif()
 
 if(IM_BUILD_METAL)
@@ -66,9 +75,8 @@ if(IM_BUILD_OPENGL3)
         "backends/imgui_impl_opengl3_loader.h"
         "backends/imgui_impl_opengl3.cpp"
     )
-    set(BACKEND_CONTAIN_OPENGL3 ON)
 endif()
 
-if(IM_BUILD_EXAMPLES AND BACKEND_CONTAIN_OPENGL3 AND BACKEND_CONTAIN_GLFW)
+if(IM_BUILD_EXAMPLES AND IM_BUILD_OPENGL3 AND IM_BUILD_GLFW)
     add_subdirectory("examples/example_glfw_opengl3_cmake")
 endif()
