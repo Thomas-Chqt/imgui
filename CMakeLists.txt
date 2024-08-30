@@ -11,7 +11,8 @@ option(IM_BUILD_GLFW     "Build GLFW backend"    OFF)
 option(IM_BUILD_METAL    "Build Metal backend"   OFF)
 option(IM_BUILD_OPENGL3  "Build Opengl3 backend" OFF)
 
-option(IM_BUILD_EXAMPLES "Build examples" OFF)
+option(IM_BUILD_EXAMPLES "Build examples"               OFF)
+option(IM_INSTALL        "Enable imgui install command" ON)
 
 project(imgui)
 enable_language(CXX)
@@ -57,8 +58,8 @@ target_sources(imgui PRIVATE
 
 if(IM_BUILD_GLFW)
     target_sources(imgui PRIVATE
-    "backends/imgui_impl_glfw.h"
-    "backends/imgui_impl_glfw.cpp"
+        "backends/imgui_impl_glfw.h"
+        "backends/imgui_impl_glfw.cpp"
     )
 endif()
 
@@ -79,4 +80,13 @@ endif()
 
 if(IM_BUILD_EXAMPLES AND IM_BUILD_OPENGL3 AND IM_BUILD_GLFW)
     add_subdirectory("examples/example_glfw_opengl3_cmake")
+endif()
+
+if(IM_INSTALL)
+    install(TARGETS imgui
+        RUNTIME DESTINATION "bin"
+        LIBRARY DESTINATION "lib"
+        ARCHIVE DESTINATION "lib"
+    )
+    install(FILES "imgui.h" "imconfig.h" TYPE INCLUDE)
 endif()
