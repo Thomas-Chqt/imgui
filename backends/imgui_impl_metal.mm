@@ -499,7 +499,6 @@ static void ImGui_ImplMetal_RenderWindow(ImGuiViewport* viewport, void*)
     renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 0);
     if ((viewport->Flags & ImGuiViewportFlags_NoRendererClear) == 0)
         renderPassDescriptor.colorAttachments[0].loadAction = MTLLoadActionClear;
-    ImGui_ImplMetal_GetBackendData()->SharedMetalContext.framebufferDescriptor.depthPixelFormat = MTLPixelFormatInvalid;
 
     id <MTLCommandBuffer> commandBuffer = [data->CommandQueue commandBuffer];
     id <MTLRenderCommandEncoder> renderEncoder = [commandBuffer renderCommandEncoderWithDescriptor:renderPassDescriptor];
