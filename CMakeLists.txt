@@ -10,31 +10,19 @@ cmake_minimum_required(VERSION 3.16)
 option(IM_BUILD_GLFW     "Build GLFW backend"    OFF)
 option(IM_BUILD_METAL    "Build Metal backend"   OFF)
 option(IM_BUILD_OPENGL3  "Build Opengl3 backend" OFF)
-
-option(IM_BUILD_EXAMPLES "Build examples"               OFF)
-option(IM_INSTALL        "Enable imgui install command" ON)
+option(IM_BUILD_VULKAN   "Build Vulkan backend"  OFF)
+option(IM_BUILD_EXAMPLES "Build examples"        OFF)
 
 project(imgui)
+
 enable_language(CXX)
 if(IM_BUILD_METAL)
     enable_language(OBJCXX)
 endif()
 
-if(NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
-endif()
-
-if(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
-endif()
-
-if(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
-endif()
-
 add_library(imgui STATIC)
 
-set_target_properties(imgui PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
+target_compile_features(imgui PUBLIC cxx_std_17)
 
 target_include_directories(imgui PUBLIC "${CMAKE_CURRENT_LIST_DIR}" "${CMAKE_CURRENT_LIST_DIR}/backends")
 
@@ -75,6 +63,13 @@ if(IM_BUILD_OPENGL3)
         "backends/imgui_impl_opengl3.h"
         "backends/imgui_impl_opengl3_loader.h"
         "backends/imgui_impl_opengl3.cpp"
+    )
+endif()
+
+if(IM_BUILD_VULKAN)
+    target_sources(imgui PRIVATE
+        "backends/imgui_impl_vulkan.h"
+        "backends/imgui_impl_vulkan.cpp"
     )
 endif()
 
