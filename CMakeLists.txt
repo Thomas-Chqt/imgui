@@ -77,6 +77,14 @@ if(IM_BUILD_EXAMPLES AND IM_BUILD_OPENGL3 AND IM_BUILD_GLFW)
     add_subdirectory("examples/example_glfw_opengl3_cmake")
 endif()
 
+if(IM_BUILD_EXAMPLES AND IM_BUILD_VULKAN AND IM_BUILD_GLFW)
+    add_subdirectory("examples/example_glfw_vulkan_cmake")
+endif()
+
+if(IM_BUILD_EXAMPLES AND IM_BUILD_METAL AND IM_BUILD_GLFW)
+    add_subdirectory("examples/example_glfw_metal_cmake")
+endif()
+
 if(IM_INSTALL)
     install(TARGETS imgui
         RUNTIME DESTINATION "bin"

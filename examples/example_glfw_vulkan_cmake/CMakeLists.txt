@@ -7,12 +7,12 @@
 
 include(FetchContent)
 
-add_executable(example_glfw_opengl3_cmake "main.cpp")
+add_executable(example_glfw_vulkan_cmake "main.cpp")
 
-set_target_properties(example_glfw_opengl3_cmake PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
-set_target_properties(example_glfw_opengl3_cmake PROPERTIES FOLDER "examples/")
+set_target_properties(example_glfw_vulkan_cmake PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
+set_target_properties(example_glfw_vulkan_cmake PROPERTIES FOLDER "examples/")
 
-target_include_directories(example_glfw_opengl3_cmake PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
+target_include_directories(example_glfw_vulkan_cmake PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
 
 FetchContent_Declare(glfw3
     GIT_REPOSITORY    https://github.com/glfw/glfw.git
@@ -31,11 +31,9 @@ endif()
 FetchContent_MakeAvailable(glfw3)
 target_link_libraries(imgui PUBLIC glfw)
 
-FetchContent_Declare(glad GIT_REPOSITORY https://github.com/Thomas-Chqt/GLAD.git GIT_TAG master GIT_SHALLOW 1)
-FetchContent_MakeAvailable(glad)
-set_target_properties(glad PROPERTIES FOLDER "examples/dependencies")
-target_link_libraries(imgui PUBLIC glad)
+find_package(Vulkan REQUIRED)
+target_link_libraries(imgui PUBLIC Vulkan::Vulkan)
 
 
-target_link_libraries(example_glfw_opengl3_cmake PRIVATE imgui)
+target_link_libraries(example_glfw_vulkan_cmake PRIVATE imgui)
 
